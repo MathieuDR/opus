@@ -4,12 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-
-    # Used for shell.nix
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
   };
 
   outputs = {
@@ -27,6 +21,11 @@
             zig
             just
           ];
+
+          shellHook = ''
+            export ZIG_GLOBAL_CACHE_DIR="$PWD/.zig-cache/global"
+            export ZIG_LOCAL_CACHE_DIR="$PWD/.zig-cache/local"
+          '';
         };
       }
     );

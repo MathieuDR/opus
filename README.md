@@ -1,30 +1,76 @@
 # opus
-Opus time tracking inspired by [zeit](https://github.com/mrusme/zeit)
+Simple, flexible CLI time tracking for developers.
 
-## Why something different
-I want more 'granular' things. I want to be able to track 'initiatives' inside a project.
-Eg for my employer I could have a project / codebase `backend` where I'm implementing a feature / initiative like `History` with a task `Data modelling`.
+Inspired by [zeit](https://github.com/mrusme/zeit), but designed for tracking work across initiatives, codebases, and contexts.
 
-The question is, is this 'nested' thing really useful, or should I just tag projects with a type of 'category' 'overarching project'
+## Philosophy
+Track time at the right granularity - not too detailed (per-file changes), not too broad (just "worked today"). Track the **work chunks** that matter: initiatives, features, tasks.
 
-Eg project could be `History` with a tag / client / beneficiary `employer`
+## Core Concepts
+- **Category** (optional): Who you're working for (`employer`, `personal`, or omit)
+- **Project**: The initiative or area of work (`History Event Sourcing`, `opus`, `homelab`)
+- **Task**: The specific work you're doing (`setup projections`, `arg parsing`)
+- **Notes**: Optional timestamped context you add as you work
 
-I also want to be able to quickly add 'meeting' or other type of 'interruptions'. Maybe you could do something like `opus interrupt -p backend -t meeting <note>`. This might make it hard, perhaps just some shorthands in fish might make this better actually. You start getting weird states if we do this, eg what does 'continue' do, you need to keep track of multiple things. If you amend / or finish it, does it continue with the old one etc.
+## Quick Start
+```bash
+# Start tracking
+opus start -c employer -p "History Event Sourcing" -t "setup projections"
 
-## Usage
-Check our [vhs](https://github.com/charmbracelet/vhs) [tape](./usage.tape)
+# Check what's running
+opus
 
-## Wants / Nice to haves
-Nice, interesting statistics in the CLI itself
-- Colour would be nice
-- Blocks and stupid bars / graphics
+# Add a note to current task
+opus log "found edge case with null timestamps"
 
-Output
-- Maybe somehow we could output it into something useful, eg a time sheet per project / category whatever
+# Switch to new task in same project
+opus switch -t "testing migration"
 
-Integration
-- Maybe integrate with github status / Linear to read what we are doing
-- Maybe integrate / see where we are (calling PWD might be associated with a project / client / category)
+# Finish current task
+opus done
 
-Waybar integration
-- See Status (Running? Task / Project / Time)
+# Continue previous task
+opus continue
+opus continue -2  # go back 2 tasks
+
+# View your time
+opus list
+opus list -p "History Event Sourcing"
+opus list -c employer
+```
+
+## Usage Examples
+See the [vhs tape](./usage.tape) for a full walkthrough, or run `vhs usage.tape` to generate the demo.
+
+## Roadmap
+
+**MVP (current focus):**
+- Core commands: status, start, done, continue, amend, switch, log
+- JSON-based storage
+- Basic list/filter commands
+- Time calculations and summaries
+
+**Nice to have:**
+- Statistics with visualizations (charts, bars, colors)
+- Export to CSV/timesheet formats
+- PWD-based project detection
+- GitHub/Linear integration for auto-filling tasks
+- [?] Reading Git log for 'reading tasks' and timestamps
+- Waybar/status bar integration
+- Configurable project shortcuts/aliases
+
+## Development
+Built with Zig to learn systems programming and create a fast, dependency-light tool.
+```bash
+# Build
+zig build
+
+# Run tests
+zig build test
+```
+
+## Why not zeit?
+zeit is great! opus is just my take on it:
+- Flexible project/initiative tracking without rigid nesting that makes sense for me
+- Category support for multi-client/employer workflows
+- Timestamped notes within tasks

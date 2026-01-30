@@ -1,7 +1,10 @@
-# punch
+# Punch
 Simple, flexible CLI time tracking for developers.
 
 Inspired by [zeit](https://github.com/mrusme/zeit), but designed for tracking work across initiatives, codebases, and contexts.
+
+## Name
+"Punch" as in punch card time clocks - a nod to the physical timecard systems that tracked work hours before digital tools.
 
 ## Philosophy
 Track time at the right granularity - not too detailed (per-file changes), not too broad (just "worked today"). Track the **work chunks** that matter: initiatives, features, tasks.
@@ -48,7 +51,7 @@ See the [vhs tape](./usage.tape) for a full walkthrough, or run `vhs usage.tape`
 ## Roadmap
 
 **MVP (current focus):**
-- Core commands: status, start, done, continue, amend, switch, log
+- Core commands: status, in, out, continue, correct, switch, log, void, card
 - JSON-based storage
 - Basic list/filter commands
 - Time calculations and summaries

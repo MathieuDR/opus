@@ -3,18 +3,29 @@ const punch = @import("punch");
 const parser = @import("parser.zig");
 
 pub fn main() !void {
-    const first_arg = std.os.argv[0];
-    std.debug.print("Type: {s}\n", .{@typeName(@TypeOf(first_arg))});
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
 
-    std.debug.print("There are {d} args:\n", .{std.os.argv[1..].len});
-    for (std.os.argv[1..]) |arg| {
-        std.debug.print("  {s}\n", .{arg});
-    }
+    const spans = try toSpans(allocator, std.os.argv[1..]);
+    defer allocator.free(spans);
 
-    const a = parser.parse(std.os.argv[1..]);
-    if (a == 1) {
-        std.debug.print("We're a normal status!\n", .{});
+    // TODO: Bug as it can have 0 etc etc
+    std.debug.print("Span: {s}\n", .{spans[0]});
+
+    const command = parser.parseCommand(spans[0]);
+    std.debug.print("Command: {s}\n", .{@tagName(command)});
+    //NOTE: It's an optional value
+    std.debug.print("Command2: {?s}\n", .{std.enums.tagName(parser.Commands, command)});
+}
+
+pub fn toSpans(allocator: std.mem.Allocator, args: [][*:0]u8) ![][]const u8 {
+    const results = try allocator.alloc([]const u8, args.len);
+
+    for (args, 0..) |arg, i| {
+        results[i] = std.mem.span(arg); // No & needed
     }
+    return results;
 }
 
 test {

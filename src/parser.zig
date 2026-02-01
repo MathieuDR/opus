@@ -1,5 +1,19 @@
 const std = @import("std");
 
+pub const Commands = enum { STATUS, START, STOP };
+
+//QUESTIONS: Should I work with [*:0]u8 for strings, or convert them to []u8
+pub fn parseCommand(command: []const u8) Commands {
+    // const normalize = try normalize(command);
+    // switch (normalize) {}
+    _ = command;
+    return Commands.STATUS;
+}
+
+fn normalize(input: [*:0]u8) [*:0]u8 {
+    return input;
+}
+
 //NOTE: [*:0] is a sentinel terminated pointer
 // Basically it ends with a literal byte value 0
 // The * in *:0 means it can have many elements.
